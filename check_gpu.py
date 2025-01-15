@@ -27,17 +27,19 @@ def get_node_info(node_name):
             # Calculate available CPUs
             node_info['Available CPUs'] = node_info['Total CPUs'] - node_info['Allocated CPUs']
 
-        # Extract real memory in MB
+        # Extract real memory in MB and convert to GB
         match = re.search(r'RealMemory=(\d+)', result.stdout)
         if match:
-            node_info['Real Memory (MB)'] = int(match.group(1))
+            real_memory_mb = int(match.group(1))
+            node_info['Real Memory (GB)'] = real_memory_mb / 1024
 
-        # Extract allocated memory in MB
+        # Extract allocated memory in MB and convert to GB
         match = re.search(r'AllocMem=(\d+)', result.stdout)
         if match:
-            node_info['Allocated Memory (MB)'] = int(match.group(1))
-            # Calculate available memory
-            node_info['Available Memory (MB)'] = node_info['Real Memory (MB)'] - node_info['Allocated Memory (MB)']
+            alloc_memory_mb = int(match.group(1))
+            node_info['Allocated Memory (GB)'] = alloc_memory_mb / 1024
+            # Calculate available memory in GB
+            node_info['Available Memory (GB)'] = node_info['Real Memory (GB)'] - node_info['Allocated Memory (GB)']
 
         # Extract GPU information
         match = re.search(r'Gres=gpu:(\w+):(\d+)', result.stdout)
@@ -97,7 +99,7 @@ def main():
     try:
         with open(csv_file, mode='w', newline='') as file:
             fieldnames = ['Node', 'Total CPUs', 'Allocated CPUs', 'Available CPUs',
-                          'Real Memory (MB)', 'Allocated Memory (MB)', 'Available Memory (MB)',
+                          'Real Memory (GB)', 'Allocated Memory (GB)', 'Available Memory (GB)',
                           'GPU Model', 'Total GPUs', 'Allocated GPUs', 'Available GPUs']
             writer = csv.DictWriter(file, fieldnames=fieldnames)
             writer.writeheader()
