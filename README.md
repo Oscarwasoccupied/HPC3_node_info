@@ -53,14 +53,15 @@ After running the script, you’ll find the results saved in a file named node_i
     | Allocated GPUs         | Number of GPUs currently in use          |
     | Available GPUs         | Number of GPUs free for allocation       |
 
-Notes
-	•	The script assumes the nodes and GPU configurations are properly set up and accessible via scontrol show node.
-	•	If some fields are missing in the scontrol output, default values (e.g., 0 for numerical fields and None for text fields) will be used to fill the gaps.
+## Notes
 
-    ---
+- The script assumes the nodes and GPU configurations are properly set up and accessible via `scontrol show node`.
+- If some fields are missing in the `scontrol` output, default values (e.g., 0 for numerical fields and None for text fields) will be used to fill the gaps.
 
-    ## Example Output Image
+---
 
-    Below is an example of the output displayed in a table format:
+## Example Output Image
 
-    ![Example Output](display_example.png)
+Below is an example of the output displayed in a table format:
+
+![Example Output](display_example.png)
