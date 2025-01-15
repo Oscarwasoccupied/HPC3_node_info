@@ -12,8 +12,20 @@ def get_node_info(node_name):
             print(f"Error retrieving information for node {node_name}: {result.stderr}")
             return None
 
-        # Initialize a dictionary to store node information
-        node_info = {'Node': node_name}
+        # Initialize a dictionary to store node information with default values
+        node_info = {
+            'Node': node_name,
+            'Total CPUs': 0,
+            'Allocated CPUs': 0,
+            'Available CPUs': 0,
+            'Real Memory (GB)': 0.0,
+            'Allocated Memory (GB)': 0.0,
+            'Available Memory (GB)': 0.0,
+            'GPU Model': 'None',
+            'Total GPUs': 0,
+            'Allocated GPUs': 0,
+            'Available GPUs': 0
+        }
 
         # Extract total CPUs
         match = re.search(r'CPUTot=(\d+)', result.stdout)
@@ -24,8 +36,8 @@ def get_node_info(node_name):
         match = re.search(r'CPUAlloc=(\d+)', result.stdout)
         if match:
             node_info['Allocated CPUs'] = int(match.group(1))
-            # Calculate available CPUs
-            node_info['Available CPUs'] = node_info['Total CPUs'] - node_info['Allocated CPUs']
+        # Calculate available CPUs
+        node_info['Available CPUs'] = node_info['Total CPUs'] - node_info['Allocated CPUs']
 
         # Extract real memory in MB and convert to GB
         match = re.search(r'RealMemory=(\d+)', result.stdout)
@@ -38,8 +50,8 @@ def get_node_info(node_name):
         if match:
             alloc_memory_mb = int(match.group(1))
             node_info['Allocated Memory (GB)'] = alloc_memory_mb / 1024
-            # Calculate available memory in GB
-            node_info['Available Memory (GB)'] = node_info['Real Memory (GB)'] - node_info['Allocated Memory (GB)']
+        # Calculate available memory in GB
+        node_info['Available Memory (GB)'] = node_info['Real Memory (GB)'] - node_info['Allocated Memory (GB)']
 
         # Extract GPU information
         match = re.search(r'Gres=gpu:(\w+):(\d+)', result.stdout)
@@ -51,8 +63,8 @@ def get_node_info(node_name):
         match = re.search(r'AllocTRES=.*gres/gpu=(\d+)', result.stdout)
         if match:
             node_info['Allocated GPUs'] = int(match.group(1))
-            # Calculate available GPUs
-            node_info['Available GPUs'] = node_info['Total GPUs'] - node_info['Allocated GPUs']
+        # Calculate available GPUs
+        node_info['Available GPUs'] = node_info['Total GPUs'] - node_info['Allocated GPUs']
 
         return node_info
 
