@@ -1,41 +1,52 @@
-# Check GPU Resource Utilization
-
-`check_gpu.py` is a Python script designed to gather and display detailed resource utilization information (e.g., CPU, memory, and GPU) for nodes in an HPC cluster managed by Slurm. The script processes data from the `scontrol show node` command, aggregates the information, and saves it in a CSV file for easy analysis.
+# Check GPU Nodes Resource Utilization
+`curses_check_gpu.py` is a Python script designed to gather and display detailed resource utilization information (e.g., CPU, memory, and GPU) for nodes in an HPC cluster managed by Slurm. The script processes data from the `scontrol show node` command, aggregates the information, and saves it in a CSV file for easy analysis. Additionally, it provides a live, real-time display of the resource utilization directly in the terminal using the curses library.
 
 ---
 
 ## Features
 
 - Retrieves detailed resource information for each node, including:
-    - Total and allocated CPUs
-    - Real and allocated memory (in GB)
-    - GPU model, total GPUs, and allocated GPUs
-- Handles missing fields by setting default values to ensure data consistency.
-- Outputs results in a CSV file (`node_info.csv`).
-- Displays completion status for each group of nodes during processing.
+     - Total and allocated CPUs
+     - Real and allocated memory (in GB)
+     - GPU model, total GPUs, and allocated GPUs
+- Outputs are directly displayed in the terminal, refreshed per 60 second.
+- (Warning: Extend the terminal window size to view all information properly.)
+- Outputs also result in a CSV file (`node_info.csv`).
 
 ---
 
 ## How to Run
 
 1. **Clone the Repository**:
-     ```bash
-     git clone https://github.com/Oscarwasoccupied/HPC3_node_info.git
-     cd HPC3_node_info
-     ```
+      ```bash
+      git clone https://github.com/Oscarwasoccupied/HPC3_node_info.git
+      cd HPC3_node_info
+      ```
 
 2. **Run the Script**:
-     Execute the script directly from the command line:
-     ```bash
-     python check_gpu.py
-     ```
+      Execute the script directly from the command line:
+      ```bash
+      python curses_check_gpu.py
+      ```
 
 3. **Check the Output**:
-     After running the script, you’ll find the results saved in a file named `node_info.csv` in the same directory. The table includes the following fields:
-     - Node
-     - Total CPUs, Allocated CPUs, Available CPUs
-     - Real Memory (GB), Allocated Memory (GB), Available Memory (GB)
-     - GPU Model, Total GPUs, Allocated GPUs, Available GPUs
+      After running the script, you’ll have live updates (refreshed per 60 second) of Node, Available CPUs, Available Memory (GB), Available GPUs, and GPU Model on the terminal. Additionally, you will find the full nodes' information saved in a file named `node_info.csv` in the same directory. The table includes the following fields:
+      - Node
+      - Total CPUs, Allocated CPUs, Available CPUs
+      - Real Memory (GB), Allocated Memory (GB), Available Memory (GB)
+      - GPU Model, Total GPUs, Allocated GPUs, Available GPUs
+
+4. **Press 'q' to quit**
+
+---
+
+## Example Output Image
+
+Below is an example of what the live output in the terminal will be like:
+![Example Output](terminal_display_example.png)
+
+Below is an example of what the saved CSV file will be like:
+![Example Output](display_example.png)
 
 ---
 
@@ -65,9 +76,3 @@ The output CSV file will look like this when viewed in a table format:
 - If some fields are missing in the `scontrol` output, default values (e.g., 0 for numerical fields and None for text fields) will be used to fill the gaps.
 
 ---
-
-## Example Output Image
-
-Below is an example of the output displayed in a table format:
-
-![Example Output](display_example.png)
