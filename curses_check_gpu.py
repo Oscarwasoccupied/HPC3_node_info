@@ -112,21 +112,22 @@ def display_results_curses(node_ranges):
             stdscr.addstr(1, 0, "Warning: Extend the terminal window size to view all information properly.")
             stdscr.addstr(2, 0, "-" * (max_x - 1))
             stdscr.addstr(3, 0, f"{'Node':<20} | {'Available CPUs':<15} | {'Available Memory (GB)':<20} | {'Available GPUs':<15} | {'GPU Model':<15}")
-            stdscr.addstr(4, 0, "-" * (max_x - 1))  # Line separating the headers from data
+            stdscr.addstr(4, 0, "-" * (max_x - 1))
 
-            for idx, node_info in enumerate(node_info_list, start=5):  # Start at line 5
-                if idx >= max_y - 1:  # Ensure we don’t write outside terminal height
+            for idx, node_info in enumerate(node_info_list, start=5):
+                if idx >= max_y - 1:
                     break
                 line = f"{node_info['Node']:<20} | {node_info['Available CPUs']:<15} | {node_info['Available Memory (GB)']:<20.2f} | {node_info['Available GPUs']:<15} | {node_info['GPU Model']:<15}"
                 stdscr.addstr(idx, 0, line[:max_x - 1])
 
             stdscr.refresh()
-            key = stdscr.getch()
 
-            if key == ord('q'):  # Quit on 'q'
-                break
-            
-            time.sleep(60)  # Refresh every 60 seconds
+            # Non-blocking sleep with periodic key checks
+            for _ in range(60):  # 60 seconds refresh interval
+                key = stdscr.getch()
+                if key == ord('q'):  # Quit on 'q'
+                    return
+                time.sleep(1)  # Sleep for 1 second
 
     curses.wrapper(draw_menu)
 
